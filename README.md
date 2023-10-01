@@ -24,11 +24,11 @@
   
 * This file creates the database and its main tables as follows:
   1. Wizards - contains information about the wizards who are registered with the library;
-  2. Skill level -  contains info about different skill levels which will relate to books that can be borrowed;
-  3. Magic ability - contains info about different types of ability that will relate to books that are recommended;
+  2. Skill_level -  contains info about different skill levels which will relate to books that can be borrowed;
+  3. Magic_ability - contains info about different types of ability that will relate to books that are recommended;
   4. Books - contains information about the books available to borrow from the library;
   5. Genre - types of books;
-  6. Borrowed books - sets out which books are borrowed and by which wizard, as well as the expected and actual date of return
+  6. Borrowed_books - sets out which books are borrowed and by which wizard, as well as the expected and actual date of return.
 
 * NB tables ii, iii and v were origianlly part of bigger tables - 'Wizards' and 'Books' respectively - but through normalisation have now been split into their own tables and are now referenced as foreign keys (FK) in the 'Wizards', 'Books' and 'Borrowed_books' tables instead.
 
@@ -53,10 +53,10 @@
   
 * Key changes using ALTER and DELETE are as follows:
   
-1. Adding a column for book availability to the 'books' table (initial default set as TRUE - in stock);
-2. Adding a column showing whether a book has been returned to the 'borrowed_books' table (initial default set as FALSE - not returned);
-3. Adding a column to track the number of books borrowed by each wizard to the 'wizards' table;
-4. Adding a new table (table 7) overdue_books
+  1. Adding a column for book availability to the 'books' table (initial default set as TRUE - in stock);
+  2. Adding a column showing whether a book has been returned to the 'borrowed_books' table (initial default set as FALSE - not returned);
+  3. Adding a column to track the number of books borrowed by each wizard to the 'wizards' table;
+  4. Adding a new table (table vii) overdue_books.
 
 * These modified tables enable new scenarios and queries to be made. Again, these all relate to the overarching scenario of being a librarian in a magic library.
 
