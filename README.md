@@ -83,6 +83,6 @@
 * **Scenario 11:** You want to develop a project to build an automated library management system and tackle the issue of overdue books. The system will incorporate various features to streamline the management of borrowed books, including tracking borrowing duration, notifying librarians of overdue books, managing fines for late returns, and maintaining records of lost and returned books. Key functionalities include:
   1. Borrowing duration analysis: calculate the average borrowing duration for all books (whether returned or still on loan). This analysis is intended to support determining a reasonable timeframe for chasing overdue books.
   2. Overdue Notifications: The system will trigger automatic notifications to librarians when a book becomes overdue. This notification will serve as an alert to take action.
-  3. Fine calculation: calculates fines for all overdue books, both those that have been returned previously, and those that are still outstanding
+  3. Fine calculation: calculates fines for all overdue books, both those that have been returned previously, and those that are still outstanding. This is based on a rate of 10 pence per day, but if the amount of time taken to return the book is greater than 26 weeks (6 months) then it will be assumed missing. In this scenario the fine to the borrower will be capped at 10 pence * 182 days (26 weeks) PLUS the cost of the missing book
   4. Adds a BOOLEAN column to overdue_books to show whether fine is paid or not.
-  5. If the fine has been paid, DELETE the data from that row.
+  5. If the fine has been paid, DELETES the data from that row.
