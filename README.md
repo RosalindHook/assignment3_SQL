@@ -51,15 +51,27 @@
 
 * This file makes changes to some of the original tables using ALTER and DELETE, which in turn allows new queries to be made. Because the tables need to be modified before the new queries are made, and because each query generates different results, the recommendation is to run this scripe one query at a time.
   
-* Key changes using ALTER and DELETE are as follows:
+* Key changes using ALTER is as follows:
   
   1. Adding a column for book availability to the 'books' table (initial default set as TRUE - in stock);
   2. Adding a column showing whether a book has been returned to the 'borrowed_books' table (initial default set as FALSE - not returned);
   3. Adding a column to track the number of books borrowed by each wizard to the 'wizards' table;
-  4. Adding a new table (table vii) overdue_books.
+  4. Adding a new table (table vii) called overdue_books;
+  5. Adding a new table (table viii) book_value.
 
-* These modified tables enable new scenarios and queries to be made. Again, these all relate to the overarching scenario of being a librarian in a magic library.
+* These modified tables enable new scenarios and queries to be made, including DELETE. Again, these all relate to the overarching scenario of being a librarian in a magic library.
 
 * **Scenario 9:** One of your customers has asked for a book by Charles Spellkens, and wants to check if there are any in stock. You want to determine the availability of books by this author.
-* **Scenario 10:** You want to develop a magical marketing campaign to encourage all wizards to use the library. There are a number of components to your campaign. Firstly, working out which wizard/s has borrowed the greatest number of books, to ask them to be the poster wizard for your campaign. Secondly, you want to determine which wizard/s has borrowed the fewest books, in order to target this campaign at them. Finally, you want to work out the most popular book/s based on total number of borrows, to use this in your planned publicity materials.
-* **Scenario 11:** You want to do some more work to stop books going overdue. [NB this needs more work but there will be something using new table to insert record when a book becomes overdue. When the book is returned then the record will be removed (deleted from this table). May use a stored procedure of function here - this would encapsulate the logic for inserting/deleting records into a single, reusable code block. Tbc...
+* **Scenario 10:** You want to develop a magical marketing campaign to encourage all wizards to use the library. There are a number of components to your campaign:
+  1. Firstly, working out which wizard/s has borrowed the greatest number of books, to ask them to be the poster wizard for your campaign.
+  2. Secondly, you want to determine which wizard/s has borrowed the fewest books, in order to target this campaign at them.
+  3. Finally, you want to work out the most popular book/s based on total number of borrows, to use this in your planned publicity materials.
+* **Scenario 11:** You want to do some more work to stop books going overdue.
+* [NB this needs more work but there will be something using new table to insert record when a book becomes overdue. When the book is returned then the record will be removed (deleted from this table). May use a stored procedure of function here - this would encapsulate the logic for inserting/deleting records into a single, reusable code block.
+* Possibly -
+  1. checking average length of borrowing (both for returned books and those not yet returned to determine what is reasonable point at which to chase)
+  2. if overdue triggers alert to librarian
+  3. if overdue by over a month, then start to incur charges
+  4. if lost then fine is cost of book plus charges
+  5. when book returned then fine is 10% cost of book plus charges
+  6. once fine is issued delete the record
