@@ -38,14 +38,14 @@
 
 * Each query is based on specific scenarios of use within the overarching scenario outlined in the 'summary' section - i.e. that you are a librarian in a magic library.
 
-* **Scenario 1: ** One of the teachers is setting up a reading list for their class. They want to know all the books (names and authors) that are registered to the library in the category of 'Dream magic'.
-* **Scenario 2: ** A wizard customer is looking for a book by a writer whose surname begins with 'B'. Or possibly 'P'. To be honest, the surname might just have the letter 'D' in it somewhere. They can't quite remember but they'd know if they heard the name. Can you help them?
-* **Scenario 3: ** That's it! It's one of the Broomte sisters. But now the wizard wants to know what kinds of books they write i.e. what the genres of the Broomte sisters' books?
-* **Scenario 4: ** You want to see a list of all wizards and their borrowed books, including wizards who haven't borrowed any books. You want the information to be ordered by the wizard's unique ID, and if a wizard does not have a book out, you will see them in the results but with the book_title returned as NULL.
-* **Scenario 5: ** You want to get a list of the wizards who are able to borrow restricted books. They have to be 14 or over, with a skill level of advanced or teacher.
-* **Scenario 6: ** You are organising a book club evening on the theme of potion making and encantations. Which wizards should you ask to speak at the evening? All speakers must be aged 14 or over.
-* **Scenario 7: ** And for this same evening, which books might you wish to have out on display? Anyone can come to this event so you had better avoid anything restricted!!
-* **Scenario 8: ** You need to chase those wizards who have overdue books. Find out the wizard id and first name of those wizards late to return their books, the date it had been due back, and  which books are late, so that you have the key information to contact them. Finally, order the results by most overdue books first, to prioritise these.
+* **Scenario 1:** One of the teachers is setting up a reading list for their class. They want to know all the books (names and authors) that are registered to the library in the category of 'Dream magic'.
+* **Scenario 2:** A wizard customer is looking for a book by a writer whose surname begins with 'B'. Or possibly 'P'. To be honest, the surname might just have the letter 'D' in it somewhere. They can't quite remember but they'd know if they heard the name. Can you help them?
+* **Scenario 3:** That's it! It's one of the Broomte sisters. But now the wizard wants to know what kinds of books they write i.e. what the genres of the Broomte sisters' books?
+* **Scenario 4:** You want to see a list of all wizards and their borrowed books, including wizards who haven't borrowed any books. You want the information to be ordered by the wizard's unique ID, and if a wizard does not have a book out, you will see them in the results but with the book_title returned as NULL.
+* **Scenario 5:** You want to get a list of the wizards who are able to borrow restricted books. They have to be 14 or over, with a skill level of advanced or teacher.
+* **Scenario 6:** You are organising a book club evening on the theme of potion making and encantations. Which wizards should you ask to speak at the evening? All speakers must be aged 14 or over.
+* **Scenario 7:** And for this same evening, which books might you wish to have out on display? Anyone can come to this event so you had better avoid anything restricted!!
+* **Scenario 8:** You need to chase those wizards who have overdue books. Find out the wizard id and first name of those wizards late to return their books, the date it had been due back, and  which books are late, so that you have the key information to contact them. Finally, order the results by most overdue books first, to prioritise these.
 
 ### File 3 - 'Assignment3_part3' ### 
 
@@ -60,6 +60,6 @@
 
 * These modified tables enable new scenarios and queries to be made. Again, these all relate to the overarching scenario of being a librarian in a magic library.
 
-* **Scenario 9: ** One of your customers has asked for a book by Charles Spellkens, and wants to check if there are any in stock. You want to determine the availability of books by this author.
-* **Scenario 10: ** You want to develop a magical marketing campaign to encourage all wizards to use the library. There are a number of components to your campaign. Firstly, working out which wizard/s has borrowed the greatest number of books, to ask them to be the poster wizard for your campaign. Secondly, you want to determine which wizard/s has borrowed the fewest books, in order to target this campaign at them. Finally, you want to work out the most popular book/s based on total number of borrows, to use this in your planned publicity materials.
-* **Scenario 11: ** You want to do some more work to stop books going overdue. [NB this needs more work but there will be something using new table to insert record when a book becomes overdue. When the book is returned then the record will be removed (deleted from this table). May use a stored procedure of function here - this would encapsulate the logic for inserting/deleting records into a single, reusable code block. Tbc...
+* **Scenario 9:** One of your customers has asked for a book by Charles Spellkens, and wants to check if there are any in stock. You want to determine the availability of books by this author.
+* **Scenario 10:** You want to develop a magical marketing campaign to encourage all wizards to use the library. There are a number of components to your campaign. Firstly, working out which wizard/s has borrowed the greatest number of books, to ask them to be the poster wizard for your campaign. Secondly, you want to determine which wizard/s has borrowed the fewest books, in order to target this campaign at them. Finally, you want to work out the most popular book/s based on total number of borrows, to use this in your planned publicity materials.
+* **Scenario 11:** You want to do some more work to stop books going overdue. [NB this needs more work but there will be something using new table to insert record when a book becomes overdue. When the book is returned then the record will be removed (deleted from this table). May use a stored procedure of function here - this would encapsulate the logic for inserting/deleting records into a single, reusable code block. Tbc...
