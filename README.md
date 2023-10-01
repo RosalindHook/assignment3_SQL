@@ -51,13 +51,16 @@
 
 * This file makes changes to some of the original tables using ALTER and DELETE, which in turn allows new queries to be made. Because the tables need to be modified before the new queries are made, and because each query generates different results, the recommendation is to run this scripe one query at a time.
   
-* Key changes using ALTER is as follows:
+* Key changes using ALTER and UPDATE are as follows:
   
   1. Adding a column for book availability to the 'books' table (initial default set as TRUE - in stock);
   2. Adding a column showing whether a book has been returned to the 'borrowed_books' table (initial default set as FALSE - not returned);
-  3. Adding a column to track the number of books borrowed by each wizard to the 'wizards' table;
-  4. Adding a new table (table vii) called overdue_books;
-  5. Adding a new table (table viii) book_value.
+  3. Adding more data to borrowed_books table to include books that were borrowed but are now returned.
+  4. Following i - iii above, updating 'in_stock' column of 'books' table to show whether books are available
+  5. Adding a column to track the number of books borrowed by each wizard to the 'wizards' table;
+  6. Updating the 'books borrowed' column
+  7. Adding a new table (table vii) called overdue_books;
+  8. Adding a new table (table viii) book_value.
 
 * These modified tables enable new scenarios and queries to be made, including DELETE. Again, these all relate to the overarching scenario of being a librarian in a magic library.
 
@@ -66,12 +69,10 @@
   1. Firstly, working out which wizard/s has borrowed the greatest number of books, to ask them to be the poster wizard for your campaign.
   2. Secondly, you want to determine which wizard/s has borrowed the fewest books, in order to target this campaign at them.
   3. Finally, you want to work out the most popular book/s based on total number of borrows, to use this in your planned publicity materials.
-* **Scenario 11:** You want to do some more work to stop books going overdue.
-* [NB this needs more work but there will be something using new table to insert record when a book becomes overdue. When the book is returned then the record will be removed (deleted from this table). May use a stored procedure of function here - this would encapsulate the logic for inserting/deleting records into a single, reusable code block.
-* Possibly -
-  1. checking average length of borrowing (both for returned books and those not yet returned to determine what is reasonable point at which to chase)
-  2. if overdue triggers alert to librarian
-  3. if overdue by over a month, then start to incur charges
-  4. if lost then fine is cost of book plus charges
-  5. when book returned then fine is 10% cost of book plus charges
-  6. once fine is issued delete the record
+* **Scenario 11:** You want to develop a project to build an automated library management system and tackle the issue of overdue books. The system will incorporate various features to streamline the management of borrowed books, including tracking borrowing duration, notifying librarians of overdue books, managing fines for late returns, and maintaining records of lost and returned books. Key functionalities include:
+  1. Borrowing Duration Analysis: You will analyze the average length of time books are borrowed, both for books that have been returned and those still on loan. This analysis will help determine a reasonable timeframe for chasing overdue books.
+  2. Overdue Notifications: The system will trigger automatic notifications to librarians when a book becomes overdue. This notification will serve as an alert to take action.
+  3. Fine Calculation: For books that are overdue by a specified period, the system will automatically begin calculating fines. Fines may include charges for prolonged overdue periods.
+  4. Lost Books: In cases where books are lost, the system will calculate fines based on the cost of the book, including any additional charges for overdue periods.
+  5. Fine Adjustment: When a lost book is subsequently returned, the system will adjust fines, typically charging a percentage of the book's cost and any outstanding overdue charges.
+  6. Record Management: The system will maintain a dedicated table to record the status of borrowed books, including due dates and outstanding fines. When fines are issued and paid, or books are returned, the system will delete or update these records accordingly.
