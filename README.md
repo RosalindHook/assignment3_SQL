@@ -70,7 +70,7 @@
   2. Secondly, you want to determine which wizard/s has borrowed the fewest books, in order to target this campaign at them.
   3. Finally, you want to work out the most popular book/s based on total number of borrows, to use this in your planned publicity materials.
 * **Scenario 11:** You want to develop a project to build an automated library management system and tackle the issue of overdue books. The system will incorporate various features to streamline the management of borrowed books, including tracking borrowing duration, notifying librarians of overdue books, managing fines for late returns, and maintaining records of lost and returned books. Key functionalities include:
-  1. Borrowing Duration Analysis: You will analyze the average length of time books are borrowed, both for books that have been returned and those still on loan. This analysis will help determine a reasonable timeframe for chasing overdue books.
+  1. Borrowing Duration Analysis: calculate the average borrowing duration for all books (whether returned or still on loan). This analysis is intended to support determining a reasonable timeframe for chasing overdue books.
   2. Overdue Notifications: The system will trigger automatic notifications to librarians when a book becomes overdue. This notification will serve as an alert to take action.
   3. Fine Calculation: For books that are overdue by a specified period, the system will automatically begin calculating fines. Fines may include charges for prolonged overdue periods.
   4. Lost Books: In cases where books are lost, the system will calculate fines based on the cost of the book, including any additional charges for overdue periods.
