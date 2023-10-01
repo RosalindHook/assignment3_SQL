@@ -39,12 +39,19 @@
 * Each query is based on specific scenarios of use within the overarching scenario outlined in the 'summary' section - i.e. that you are a librarian in a magic library.
 
 * **Scenario 1:** One of the teachers is setting up a reading list for their class. They want to know all the books (names and authors) that are registered to the library in the category of 'Dream magic'.
+  
 * **Scenario 2:** A wizard customer is looking for a book by a writer whose surname begins with 'B'. Or possibly 'P'. To be honest, the surname might just have the letter 'D' in it somewhere. They can't quite remember but they'd know if they heard the name. Can you help them?
+  
 * **Scenario 3:** That's it! It's one of the Broomte sisters. But now the wizard wants to know what kinds of books they write i.e. what the genres of the Broomte sisters' books?
+  
 * **Scenario 4:** You want to see a list of all wizards and their borrowed books, including wizards who haven't borrowed any books. You want the information to be ordered by the wizard's unique ID, and if a wizard does not have a book out, you will see them in the results but with the book_title returned as NULL.
+
 * **Scenario 5:** You want to get a list of the wizards who are able to borrow restricted books. They have to be 14 or over, with a skill level of advanced or teacher.
+
 * **Scenario 6:** You are organising a book club evening on the theme of potion making and encantations. Which wizards should you ask to speak at the evening? All speakers must be aged 14 or over.
+
 * **Scenario 7:** And for this same evening, which books might you wish to have out on display? Anyone can come to this event so you had better avoid anything restricted!!
+
 * **Scenario 8:** You need to chase those wizards who have overdue books. Find out the wizard id and first name of those wizards late to return their books, the date it had been due back, and  which books are late, so that you have the key information to contact them. Finally, order the results by most overdue books first, to prioritise these.
 
 ### File 3 - 'Assignment3_part3' ### 
@@ -58,21 +65,24 @@
   3. Adding more data to borrowed_books table to include books that were borrowed but are now returned.
   4. Following i - iii above, updating 'in_stock' column of 'books' table to show whether books are available
   5. Adding a column to track the number of books borrowed by each wizard to the 'wizards' table;
-  6. Updating the 'books borrowed' column
-  7. Adding a new table (table vii) called overdue_books;
-  8. Adding a new table (table viii) book_value.
+  6. Updating the 'books borrowed' column to show how many books have been borrowed by each wizard;
+  7. Adding a new table (table vii) called overdue_books which includes a fine_amount column;
+  8. Populating the over_due books column with information about ALL books that have ever been overdue (including those that went overdue but are now returned)
+  9. Adding a new table (table viii) book_value.
+  10. Populating the book_value table with the replacement_cost of books, using the book_id as a FK linked to the 'books' table.
 
 * These modified tables enable new scenarios and queries to be made, including DELETE. Again, these all relate to the overarching scenario of being a librarian in a magic library.
 
 * **Scenario 9:** One of your customers has asked for a book by Charles Spellkens, and wants to check if there are any in stock. You want to determine the availability of books by this author.
+
 * **Scenario 10:** You want to develop a magical marketing campaign to encourage all wizards to use the library. There are a number of components to your campaign:
   1. Firstly, working out which wizard/s has borrowed the greatest number of books, to ask them to be the poster wizard for your campaign.
   2. Secondly, you want to determine which wizard/s has borrowed the fewest books, in order to target this campaign at them.
   3. Finally, you want to work out the most popular book/s based on total number of borrows, to use this in your planned publicity materials.
+
 * **Scenario 11:** You want to develop a project to build an automated library management system and tackle the issue of overdue books. The system will incorporate various features to streamline the management of borrowed books, including tracking borrowing duration, notifying librarians of overdue books, managing fines for late returns, and maintaining records of lost and returned books. Key functionalities include:
-  1. Borrowing Duration Analysis: calculate the average borrowing duration for all books (whether returned or still on loan). This analysis is intended to support determining a reasonable timeframe for chasing overdue books.
+  1. Borrowing duration analysis: calculate the average borrowing duration for all books (whether returned or still on loan). This analysis is intended to support determining a reasonable timeframe for chasing overdue books.
   2. Overdue Notifications: The system will trigger automatic notifications to librarians when a book becomes overdue. This notification will serve as an alert to take action.
-  3. Fine Calculation: For books that are overdue by a specified period, the system will automatically begin calculating fines. Fines may include charges for prolonged overdue periods.
-  4. Lost Books: In cases where books are lost, the system will calculate fines based on the cost of the book, including any additional charges for overdue periods.
-  5. Fine Adjustment: When a lost book is subsequently returned, the system will adjust fines, typically charging a percentage of the book's cost and any outstanding overdue charges.
-  6. Record Management: The system will maintain a dedicated table to record the status of borrowed books, including due dates and outstanding fines. When fines are issued and paid, or books are returned, the system will delete or update these records accordingly.
+  3. Fine calculation: calculates fines for all overdue books, both those that have been returned previously, and those that are still outstanding
+  4. Adds a BOOLEAN column to overdue_books to show whether fine is paid or not.
+  5. If the fine has been paid, DELETE the data from that row.
