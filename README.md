@@ -62,13 +62,13 @@
   
   1. Adding a column for book availability to the 'books' table (initial default set as TRUE - in stock);
   2. Adding a column showing whether a book has been returned to the 'borrowed_books' table (initial default set as FALSE - not returned);
-  3. Adding more data to borrowed_books table to include books that were borrowed but are now returned.
-  4. Following i - iii above, updating 'in_stock' column of 'books' table to show whether books are available
+  3. Adding more data to borrowed_books table to include books that were borrowed but are now returned;
+  4. Following i - iii above, updating 'in_stock' column of 'books' table to show whether books are available;
   5. Adding a column to track the number of books borrowed by each wizard to the 'wizards' table;
   6. Updating the 'books borrowed' column to show how many books have been borrowed by each wizard;
   7. Adding a new table (table vii) called overdue_books which includes a fine_amount column;
-  8. Populating the over_due books column with information about ALL books that have ever been overdue (including those that went overdue but are now returned)
-  9. Adding a new table (table viii) book_value.
+  8. Populating the over_due books column with information about ALL books that have ever been overdue (including those that went overdue but are now returned);
+  9. Adding a new table (table viii) book_value; and
   10. Populating the book_value table with the replacement_cost of books, using the book_id as a FK linked to the 'books' table.
 
 * These modified tables enable new scenarios and queries to be made, including DELETE. Again, these all relate to the overarching scenario of being a librarian in a magic library.
@@ -80,9 +80,9 @@
   2. Secondly, you want to determine which wizard/s has borrowed the fewest books, in order to target this campaign at them.
   3. Finally, you want to work out the most popular book/s based on total number of borrows, to use this in your planned publicity materials.
 
-* **Scenario 11:** You want to develop a project to build an automated library management system and tackle the issue of overdue books. The system will incorporate various features to streamline the management of borrowed books, including tracking borrowing duration, notifying librarians of overdue books, managing fines for late returns, and maintaining records of lost and returned books. Key functionalities include:
-  1. Borrowing duration analysis: calculate the average borrowing duration for all books (whether returned or still on loan). This analysis is intended to support determining a reasonable timeframe for chasing overdue books.
-  2. Overdue Notifications: The system will trigger automatic notifications to librarians when a book becomes overdue. This notification will serve as an alert to take action.
-  3. Fine calculation: calculates fines for all overdue books, both those that have been returned previously, and those that are still outstanding. This is based on a rate of 10 pence per day, but if the amount of time taken to return the book is greater than 26 weeks (6 months) then it will be assumed missing. In this scenario the fine to the borrower will be capped at 10 pence * 182 days (26 weeks) PLUS the cost of the missing book
-  4. Adds a BOOLEAN column to overdue_books to show whether fine is paid or not.
+* **Scenario 11:** You want to tackle the issue of overdue books. Key aspects of this project include:
+  1. Borrowing duration analysis: calculate the average borrowing duration for all books (whether returned or still on loan). This analysis is intended to support determining a reasonable timeframe for chasing overdue books;
+  2. Overdue Notifications: The system will trigger automatic notifications to librarians when a book becomes overdue. This notification will serve as an alert to take action;
+  3. Fine calculation: calculates fines for all overdue books, both those that have been returned previously, and those that are still outstanding. This is based on a rate of 10 pence per day, but if the amount of time taken to return the book is greater than 26 weeks (6 months) then it will be assumed missing. In this scenario the fine to the borrower will be capped at 10 pence * 182 days (26 weeks) PLUS the cost of the missing book;
+  4. Adds a BOOLEAN column to overdue_books to show whether fine is paid or not; and
   5. If the fine has been paid, DELETES the data from that row.
