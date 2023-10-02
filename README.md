@@ -4,85 +4,79 @@
 
 * This is my third assignment for the CFG Software Engineering Degree, covering data and MySQL.
 
-* This assignment was designed and written using MySQL Workbench. It comprises three main files containing queries covering the assignment's main criteria, the main purpose of which is *to solve a specific problem as per your chosen theme.*
+* This assignment was designed and written using MySQL Workbench. It comprises three main .sql files containing queries covering the assignment's main criteria, the main purpose of which is *"to solve a specific problem as per your chosen theme."*
 
-* My overarching scenario of use is as follows: You are a librarian in a magical library and need to manage the library stock for your wizarding customers. Books are classified by genre and some are restricted and are only allowed to be borrowed by fully qualified (advanced) wizards. There are a number of different use scenarios that I outline in the 'usage' section, designed to provide problems that can be solved using SQL queries and by modifying the database/its tables.
+* My overarching scenario of use is as follows: You are a librarian in a magical library and need to manage the library stock for your wizarding customers. Books are classified by genre and some are restricted and are only allowed to be borrowed by fully qualified (advanced) wizards. There are a number of different use scenarios that I outline in the 'usage' section, designed to provide real-life (albeit magical) problems that can be solved using SQL queries and by modifying the database/its tables.
 
 ## Installation ##
 
-* You need to use MySQL Workbench to run three files.
+* To run this project, you need to have MySQL Workbench installed.
 
 ## Usage ##
 
-* The three key files need to be run in the correct order. This is because queries in the second and third files change the tables in the first, in order to meet all the criteria of the assignment and deal with different scenarios of use.
-
-* SQL in the first file can be executed in its entirety in one go, whereas the second and third need to be run in portions.
+* The three key files need to be run in the correct order. This is because queries in the second and third files change the tables in the first to meet all the assignment criteria and address different use scenarios.
 
 ### File 1 - 'Assignment3_part1' ###
 
-* This file can be executed in its entirety in one go, because it drops the database if it already exists and creates it again, as well as all the tables therein.
-  
-* This file creates the database and its main tables as follows:
-  1. Wizards - contains information about the wizards who are registered with the library;
-  2. Skill_level -  contains info about different skill levels which will relate to books that can be borrowed;
-  3. Magic_ability - contains info about different types of ability that will relate to books that are recommended;
-  4. Books - contains information about the books available to borrow from the library;
+* This file can be executed in its entirety in one go, as it drops the database if it already exists and recreates it, along with all the necessary tables:
+  1. Wizards - contains information about registered wizards;
+  2. Skill_level -  contains information about different skill levels relating to book borrowing;
+  3. Magic_ability - contains information about different types of ability related to recommended books;
+  4. Books - contains information about library book stock;
   5. Genre - types of books;
-  6. Borrowed_books - sets out which books are borrowed and by which wizard, as well as the expected and actual date of return.
+  6. Borrowed_books - records which books are borrowed and by which wizard, along with the expect and actual return dates.
 
-* NB tables ii, iii and v were origianlly part of bigger tables - 'Wizards' and 'Books' respectively - but through normalisation have now been split into their own tables and are now referenced as foreign keys (FK) in the 'Wizards', 'Books' and 'Borrowed_books' tables instead.
+* Tables II, III and V were origianlly part of larger tables ('Wizards' and 'Books') but have been normalised and split into their own tables. Their data are now referenced as foreign keys (FK) in the 'Wizards', 'Books' and 'Borrowed_books' tables instead.
 
 ### File 2 - 'Assignment3_part2' ### 
 
-* This file contains queries to retrieve data from the database/tables established in part 1. Because each query generates different results, the recommendation is to run this script one query at a time
+* This file contains queries to retrieve data from the database/tables established in File 1. To get the desired results, it's recommended to run each query one at a time.
 
-* Each query is based on specific scenarios of use within the overarching scenario outlined in the 'summary' section - i.e. that you are a librarian in a magic library.
-
-* **Scenario 1:** One of the teachers is setting up a reading list for their class. They want to know all the books (names and authors) that are registered to the library in the category of 'Dream magic'.
+* **Scenario 1:** Retrieve all books (names and authors) in the 'Dream Magic' category, to help a teacher to write a reading list for their Dreams class.
   
-* **Scenario 2:** A wizard customer is looking for a book by a writer whose surname begins with 'B'. Or possibly 'P'. To be honest, the surname might just have the letter 'D' in it somewhere. They can't quite remember but they'd know if they heard the name. Can you help them?
+* **Scenario 2:** Help a wizard customer find a book by a writer whose surname begins with 'B', 'P', or possibly just has the letter 'D' in it. They can't remember any more details than that.
   
-* **Scenario 3:** That's it! It's one of the Broomte sisters. But now the wizard wants to know what kinds of books they write i.e. what the genres of the Broomte sisters' books?
+* **Scenario 3:** Discover the unique genres of books written by the Broomte sisters.
   
-* **Scenario 4:** You want to see a list of all wizards and their borrowed books, including wizards who haven't borrowed any books. You want the information to be ordered by the wizard's unique ID, and if a wizard does not have a book out, you will see them in the results but with the book_title returned as NULL.
+* **Scenario 4:** List all wizards and their borrowed books, including wizards with no borrowed books, ordered by unique wizard ID.
 
-* **Scenario 5:** You want to get a list of the wizards who are able to borrow restricted books. They have to be 14 or over, with a skill level of advanced or teacher.
+* **Scenario 5:** Find wizards eligible to borrow restricted books (age 14 or older, skill level advanced or teacher).
 
-* **Scenario 6:** You are organising a book club evening on the theme of potion making and encantations. Which wizards should you ask to speak at the evening? All speakers must be aged 14 or over.
+* **Scenario 6:** Identify wizards to speak at a book club evening on potion making and encantations (age 14 or older).
 
-* **Scenario 7:** And for this same evening, which books might you wish to have out on display? Anyone can come to this event so you had better avoid anything restricted!!
+* **Scenario 7:** Select books for display at the book club evening, excluding restricted books.
 
-* **Scenario 8:** You need to chase those wizards who have overdue books. Find out the wizard id and first name of those wizards late to return their books, the date it had been due back, and  which books are late, so that you have the key information to contact them. Finally, order the results by most overdue books first, to prioritise these.
+* **Scenario 8:** Identify wizards with overdue books, incluing the date the books were due and listing the most overdue books first.
 
 ### File 3 - 'Assignment3_part3' ### 
 
-* This file makes changes to some of the original tables using ALTER and DELETE, which in turn allows new queries to be made. Because the tables need to be modified before the new queries are made, and because each query generates different results, the recommendation is to run this scripe one query at a time.
+* This file modifies original tables from File 1 using ALTER and DELETE, enabling new queries. Run each query one at a time.
   
-* Key changes using ALTER and UPDATE are as follows:
+* Key changes include:
   
   1. Adding a column for book availability to the 'books' table (initial default set as TRUE - in stock);
-  2. Adding a column showing whether a book has been returned to the 'borrowed_books' table (initial default set as FALSE - not returned);
-  3. Adding more data to borrowed_books table to include books that were borrowed but are now returned;
-  4. Following i - iii above, updating 'in_stock' column of 'books' table to show whether books are available;
+  2. Adding a column indicating whether a book has been returned to the 'borrowed_books' table (initial default set as FALSE - not returned);
+  3. Adding more data to borrowed_books table to include returned books;
+  4. Updating the 'in_stock' column of 'books' table to reflect availability;
   5. Adding a column to track the number of books borrowed by each wizard to the 'wizards' table;
-  6. Updating the 'books borrowed' column to show how many books have been borrowed by each wizard;
-  7. Adding a new table (table vii) called overdue_books which includes a fine_amount column;
-  8. Populating the over_due books column with information about ALL books that have ever been overdue (including those that went overdue but are now returned);
-  9. Adding a new table (table viii) book_value; and
-  10. Populating the book_value table with the replacement_cost of books, using the book_id as a FK linked to the 'books' table.
+  6. Updating the 'books_borrowed' column to count the number of books borrowed by each wizard;
+  7. Creating a new table 'overdue_books' with a 'fine_amount' column;
+  8. Populating the 'overdue_books' table with information about all overdue books;
+  9. Adding a new table 'book_value'; and
+  10. Populating 'book_value' table with replacement costs linked to the 'books' table via book_id (FK).
 
-* These modified tables enable new scenarios and queries to be made, including DELETE. Again, these all relate to the overarching scenario of being a librarian in a magic library.
+* These modified tables enable new scenarios and queries, including DELETE:
 
-* **Scenario 9:** One of your customers has asked for a book by Charles Spellkens, and wants to check if there are any in stock. You want to determine the availability of books by this author.
+* **Scenario 9:** Check the availability of books by Charles Spellkens for a customer.
 
-* **Scenario 10:** You want to develop a magical marketing campaign to encourage all wizards to use the library. There are a number of components to your campaign:
-  1. Firstly, working out which wizard/s has borrowed the greatest number of books, to ask them to be the poster wizard for your campaign.
-  2. Secondly, you want to determine which wizard/s has borrowed the fewest books, in order to target this campaign at them.
-  3. Finally, you want to work out the most popular book/s based on total number of borrows, to use this in your planned publicity materials.
+* **Scenario 10:** Develop a marketing campaign for the library. There are a number of components:
+  1. Calculating which wizard/s has borrowed the greatest number of books, to ask them to be the poster wizard for your campaign.
+  2. Determining which wizard/s has borrowed the fewest books, in order to target this campaign at them.
+  3. Determining the most popular book/s based on total number of borrows, to use this in your planned publicity materials.
 
-* **Scenario 11:** You want to tackle the issue of overdue books. Key aspects of this project include:
-  1. Borrowing duration analysis: calculate the average borrowing duration for all books (whether returned or still on loan). This analysis is intended to support determining a reasonable timeframe for chasing overdue books;
+* **Scenario 11:** Tackle overdue books. Key aspects of this project include:
+  1. Analysing borrowing duration: calculate the average borrowing duration for all books (whether returned or still on loan). This analysis is intended to support determining a reasonable timeframe for chasing overdue books;
   2. Overdue Notifications: The system will trigger automatic notifications to librarians when a book becomes overdue. This notification will serve as an alert to take action;
-  3. Fine calculation: calculates fines for all overdue books, both those that have been returned previously, and those that are still outstanding. This is based on a rate of 10 pence per day, but if the amount of time taken to return the book is greater than 26 weeks (6 months) then it will be assumed missing. In this scenario the fine to the borrower will be capped at 10 pence * 182 days (26 weeks) PLUS the cost of the missing book;
-  4. Adds a BOOLEAN column to overdue_books to show whether fine is paid or not; and
-  5. If the fine has been paid, DELETES the data from that row.
+  3. Calculating fines: This is based on a rate of 10 pence per day, but if the amount of time taken to return the book is greater than 26 weeks (6 months) then it will be assumed missing. In this scenario the fine to the borrower will be capped at 10 pence * 182 days (26 weeks) PLUS the cost of the missing book;
+  4. Adding a BOOLEAN column to overdue_books to show whether fine is paid or not; and
+  5. If the fine has been paid, DELETING the data from that row.
