@@ -156,27 +156,29 @@ FROM borrowed_books bb;    -- average is 42.6 days
 
 /* ii) to follow */
 
-/* iii) calculates fines for all overdue books, both those returned and those still out (10p per day)*/
-
-/* 10 pence per day fine- If the amount of time taken to return the book is greater than 26 weeks (6 months) 
-then it will be assumed missing, and the fine to the borrower will be capped at 10 pence * 26 weeks 
-PLUS the cost of the missing book*/
+/* iii) calculates fines for all overdue books, both those returned and those still out (10p per day) plus
+cost of missing book if overdue > 6 months*/
 UPDATE overdue_books
 SET fine_amount = 
 CASE
     WHEN return_date IS NOT NULL THEN    -- for books that have been returned but were overdue
         CASE
-            WHEN DATEDIFF(NOW(), due_date) <= 7 * 26 THEN DATEDIFF(return_date, due_date) * 0.10
-            -- for books more than 6 months overdue, assumed lost
-            ELSE (7 * 26 * 0.10) + (SELECT replacement_cost FROM book_value bv WHERE bv.book_id = overdue_books.book_id)
+            WHEN DATEDIFF(return_date, due_date) <= 7 * 26  -- books less than 6 months overdue
+            THEN DATEDIFF(return_date, due_date) * 0.10  -- days overdue * 10 pence
+            ELSE (7 * 26 * 0.10) +    -- 6 month overdue fine plus replacement cost of the book
+            (SELECT replacement_cost FROM book_value bv WHERE bv.book_id = overdue_books.book_id)
         END
-    ELSE
+    ELSE  -- for books still not returned and overdue
         CASE
-            WHEN DATEDIFF(NOW(), due_date) <= 7 * 26 THEN DATEDIFF(NOW(), due_date) * 0.10  -- for books still overdue
-            ELSE (7 * 26 * 0.10) + (SELECT replacement_cost FROM book_value bv WHERE bv.book_id = overdue_books.book_id)
+            WHEN DATEDIFF(NOW(), due_date) <= 7 * 26  -- books less than 6 months overdue
+            THEN DATEDIFF(NOW(), due_date) * 0.10  -- days overdue * 10 pence
+            ELSE (7 * 26 * 0.10) +   -- 6 month overdue fine plus replacement cost of book
+            (SELECT replacement_cost FROM book_value bv WHERE bv.book_id = overdue_books.book_id)
         END
-END
-WHERE due_date < NOW();
+	END
+WHERE return_date > due_date  -- returned late
+OR due_date < NOW();  -- still not returned and overdue
+
 /* optional query to check table overdue_books 
 SELECT * FROM overdue_books; */
 
