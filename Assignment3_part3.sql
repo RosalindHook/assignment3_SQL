@@ -38,7 +38,7 @@ SET in_stock = FALSE
 WHERE
 book_id IN (SELECT book_id FROM borrowed_books WHERE returned = FALSE);
 
-/* v. uses ALTER to add books_borrowed column to 'wizards' table to show how many books wizards have borrowed */
+/* v. uses ALTER to add books_borrowed column to 'wizards' table to show how many books wizards have borrowed*/
 ALTER TABLE wizards
 ADD COLUMN books_borrowed INTEGER DEFAULT 0;  -- sets number of books borrowed to default 0
 
@@ -46,7 +46,6 @@ ADD COLUMN books_borrowed INTEGER DEFAULT 0;  -- sets number of books borrowed t
 
 /*COUNT used to calculate number of borrowed books for each wizard.*/
 /*Subquery result assigned to the 'books_borrowed' column in the 'wizards' table */
-
 UPDATE wizards w
 SET books_borrowed = (
 	SELECT COUNT(bb.borrowed_id)
@@ -61,7 +60,7 @@ wizard_id INTEGER REFERENCES wizards(wizard_id),
 book_id INTEGER REFERENCES books(book_id),
 due_date DATE,
 return_date DATE,
-fine_amount DECIMAL(6,2)
+fine_amount DECIMAL(8,2)
 );
 
 /* viii. populates overdue_books using UNION operator*/
@@ -75,7 +74,7 @@ UNION
 SELECT
 bb.wizard_id, bb.book_id, bb.due_date, NULL as return_date
 FROM borrowed_books bb
-WHERE bb.due_date < NOW() AND bb.returned = FALSE; -- selects currently overdue books
+WHERE bb.due_date < NOW() AND bb.returned = FALSE; -- selects currently overdue books, fine = NULL
 
 /* ix. creates new empty table book_value */
 CREATE TABLE book_value (
@@ -128,13 +127,13 @@ AND in_stock = 1;   -- returns A Tale of Two Cauldrons, Great Enchantments and M
 
 /* i) - using aggregate function MAX() to determine which wizard/s has borrowed the most books, with nested 
 sub-query */
-SELECT wizard_id, wizard_name, first_name, last_name, age, books_borrowed
+SELECT wizard_id, wizard_name, first_name, last_name, books_borrowed
 FROM wizards
 WHERE books_borrowed = (SELECT MAX(books_borrowed) FROM wizards);  -- returns TheEnchanter and HocusTheMysticSmith
 
 /* ii) using aggregate function MIN() to determine which wizard/s has borrowed the fewest books, with nested 
 sub-query.*/
-SELECT wizard_id, wizard_name, first_name, last_name, age, books_borrowed
+SELECT wizard_id, wizard_name, first_name, last_name, books_borrowed
 FROM wizards
 WHERE books_borrowed = (SELECT MIN(books_borrowed) FROM wizards);  -- returns 6 wizards who have never borrowed books
 
@@ -145,7 +144,7 @@ INNER JOIN borrowed_books bb ON b.book_id = bb.book_id
 GROUP BY b.book_id, b.book_title, b.author_surname
 ORDER BY total_borrows DESC;    -- The Mystical Garden is most popular with 3 borrows
 
-/* Scenario 11 - building an automated library management system*/
+/* Scenario 11 - tackling overdue books issue */
 
 /* i) uses aggregate function AVG() to calculate difference between return data and borrow date for
 each borrowed book, then calculates the average of those differences. Returns single value representing
@@ -156,30 +155,48 @@ FROM borrowed_books bb;    -- average is 42.6 days
 
 /* ii) to follow */
 
-/* iii) calculates fines for all overdue books, both those returned and those still out (10p per day) plus
-cost of missing book if overdue > 6 months*/
-UPDATE overdue_books
-SET fine_amount = 
-CASE
-    WHEN return_date IS NOT NULL THEN    -- for books that have been returned but were overdue
-        CASE
-            WHEN DATEDIFF(return_date, due_date) <= 7 * 26  -- books less than 6 months overdue
-            THEN DATEDIFF(return_date, due_date) * 0.10  -- days overdue * 10 pence
-            ELSE (7 * 26 * 0.10) +    -- 6 month overdue fine plus replacement cost of the book
-            (SELECT replacement_cost FROM book_value bv WHERE bv.book_id = overdue_books.book_id)
-        END
-    ELSE  -- for books still not returned and overdue
-        CASE
-            WHEN DATEDIFF(NOW(), due_date) <= 7 * 26  -- books less than 6 months overdue
-            THEN DATEDIFF(NOW(), due_date) * 0.10  -- days overdue * 10 pence
-            ELSE (7 * 26 * 0.10) +   -- 6 month overdue fine plus replacement cost of book
-            (SELECT replacement_cost FROM book_value bv WHERE bv.book_id = overdue_books.book_id)
-        END
-	END
-WHERE return_date > due_date  -- returned late
-OR due_date < NOW();  -- still not returned and overdue
+/* iii) creates stored function to calculate fine */
+DELIMITER //
 
-/* optional query to check table overdue_books 
+CREATE FUNCTION calculate_fine(
+	in_return_date DATE,
+    in_due_date DATE,
+    in_book_id int
+)
+RETURNS DECIMAL(10,2) DETERMINISTIC
+BEGIN
+	DECLARE fine DECIMAL(10,2);
+    
+    IF in_return_date IS NOT NULL THEN -- e.g. for books that have been returned but were overdue
+		IF DATEDIFF(in_return_date, in_due_date) <= 7 * 26 THEN -- books less than 6 months overdue
+			SET fine = DATEDIFF(in_return_date, in_due_date) * 0.10; -- days overdue * 10 pence
+		ELSE -- for books more than 6 months overdue
+			SET fine = (7 * 26 * 0.10) + (
+				SELECT replacement_cost FROM book_value WHERE book_id = in_book_id
+			);
+		END IF;
+	ELSE -- for books that have not yet been returned and are overdue
+		IF DATEDIFF(NOW(), in_due_date) <- 7 * 26 THEN -- books less than 6 months overdue
+			SET fine = DATEDIFF(NOW(), in_due_date) * 0.10;
+		ELSE -- for books more than 6 months overdue
+			SET fine = (7 * 26 * 0.10) + (
+				SELECT replacement_cost FROM book_value WHERE book_id = in_book_id
+			);
+		END IF;
+	END IF;
+    
+    RETURN fine;
+END;
+//
+
+DELIMITER ;
+    
+/* calls calculate_fine() to update overdue_books with fine information */
+UPDATE overdue_books
+SET fine_amount = calculate_fine(return_date, due_date, book_id)
+WHERE return_date > due_date OR due_date < NOW();
+
+/* optional query to check fine_amount column populated correctly
 SELECT * FROM overdue_books; */
 
 /* iv) Adds a fine_paid column to the overdue_books table, sets default value as FALSE */
