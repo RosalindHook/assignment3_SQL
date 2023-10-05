@@ -1,5 +1,5 @@
-/* This file makes changes to some of the magic_library data tables using ALTER and UPDATE, creates two new 
-tables and enables additional queries based on new scenarios. See Readme file for more information about the specifics of each scenario.*/
+/* This file makes changes to some of the magic_library data tables using ALTER and UPDATE, creates two new tables (book_value and overdue_books) and 
+enables additional queries based on new scenarios. A stored procedure and a stored function are also used. See Readme file for more information about the specifics of each scenario.*/
 
 USE magic_library;
 
@@ -60,7 +60,8 @@ borrowed_id INTEGER REFERENCES borrowed_books(borrowed_id),
 wizard_id INTEGER REFERENCES wizards(wizard_id),
 book_id INTEGER REFERENCES books(book_id),
 due_date DATE,
-return_date DATE
+return_date DATE,
+fine_paid BOOLEAN DEFAULT FALSE
 );
 
 /* viii. uses STORED PROCEDURE with UNION operator to populate overdue_books table */
@@ -84,14 +85,12 @@ END;
 
 DELIMITER ;
 
-/* optional queries to check stored procedure has worked by creating new row of data for borrowed_books table and then calling stored procedure */
+/* optional queries to check stored procedure has worked by creating new row of data for borrowed_books table and then calling stored procedure
 INSERT INTO borrowed_books (borrow_date, due_date, return_date, wizard_id, book_id, returned)
 VALUES
-('2023-08-25', DATE_ADD('2023-08-25', INTERVAL 4 WEEK),	NULL, 18, 11, FALSE);
+('2023-08-01', DATE_ADD('2023-08-01', INTERVAL 4 WEEK),	NULL, 12, 11, FALSE);
 CALL populate_overdue_books();
-SELECT * FROM overdue_books; -- returns new row in overdue_books by taking data that has been inserted into borrowed_books, and identifying it as overdue
-
-SELECT * FROM borrowed_books;
+SELECT * FROM overdue_books; -- returns new row in overdue_books by taking data that has been inserted into borrowed_books, and identifying it as overdue */
 
 /* ix. creates new empty table book_value */
 CREATE TABLE book_value (
@@ -206,26 +205,17 @@ END;
 DELIMITER ;
 
 /* calls calculate_fine stored function and returns fine_amount as temporary result */
-SELECT return_date, due_date, book_id, calculate_fine(return_date, due_date, book_id) AS fine_amount
+SELECT overdue_id, wizard_id, book_id, calculate_fine(return_date, due_date, book_id) AS fine_amount
 FROM
 overdue_books;
 
-
-/* iv) Adds a fine_paid column to the overdue_books table, sets default value as FALSE */
-ALTER TABLE overdue_books
-ADD COLUMN fine_paid BOOLEAN DEFAULT FALSE;
-/* optional query to check table overdue_books 
-SELECT * FROM overdue_books; */
-
-/* updates table to set fine_paid to TRUE for specified overdue_id values */
+/* iii) Deletes row from the overdue_books table when fine is paid */
 UPDATE overdue_books
 SET fine_paid = TRUE
-WHERE overdue_id = 1 OR overdue_id = 3 OR overdue_id = 4;
-/* optional query to check table overdue_books 
-SELECT * FROM overdue_books; */
+WHERE overdue_id = 1 OR overdue_id = 3 OR overdue_id = 4; -- example of records being updated when fines paid
 
-/* deletes rows where the fine has been paid, i.e. is TRUE */
 DELETE FROM overdue_books
 WHERE fine_paid = TRUE;
+
 /* optional query to check table overdue_books 
-SELECT * FROM overdue_books; */
+SELECT * FROM overdue_books; -- returns results without overdue_id records 1, 3 or 4*/
