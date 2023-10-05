@@ -21,7 +21,7 @@ BEGIN
 			);
 		END IF;
 	ELSE -- for books that have not yet been returned and are overdue
-		IF DATEDIFF(NOW(), in_due_date) <- 7 * 26 THEN -- books less than 6 months overdue
+		IF DATEDIFF(NOW(), in_due_date) <= 7 * 26 THEN -- books less than 6 months overdue
 			SET fine = DATEDIFF(NOW(), in_due_date) * 0.10;
 		ELSE -- for books more than 6 months overdue
 			SET fine = (7 * 26 * 0.10) + (
