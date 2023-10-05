@@ -65,7 +65,7 @@
   9. Adding a new table 'book_value'; and
   10. Populating 'book_value' table with replacement costs linked to the 'books' table via book_id (FK).
 
-* These modified tables enable new scenarios and queries, including DELETE:
+* These modified tables enable new scenarios and queries, including a DELETE query for when data becomes obsolete:
 
 * **Scenario 9:** Check the availability of books by Charles Spellkens for a customer.
 
@@ -74,9 +74,9 @@
   2. Determining which wizard/s has borrowed the fewest books, in order to target this campaign at them.
   3. Determining the most popular book/s based on total number of borrows, to use this in your planned publicity materials.
 
-* **Scenario 11:** Tackle overdue books. Key aspects of this project include:
+* **Scenario 11:** Tackle issue of overdue books. Key aspects of this project include:
   1. Analysing borrowing duration: calculate the average borrowing duration for all books (whether returned or still on loan). This analysis is intended to support determining a reasonable timeframe for chasing overdue books;
-  2. Overdue Notifications: The system will trigger automatic notifications to librarians when a book becomes overdue. This notification will serve as an alert to take action;
-  3. Calculating fines: This is based on a rate of 10 pence per day, but if the amount of time taken to return the book is greater than 26 weeks (6 months) then it will be assumed missing. In this scenario the fine to the borrower will be capped at 10 pence * 182 days (26 weeks) PLUS the cost of the missing book;
+  2. Overdue Notifications: using a stored procedure, check for any books becoming overdue each day. Trigger automatic notifications to libraries when a book becomes overdue, and update the overdue_books table;
+  3. Calculating fines: This is based on a rate of 10 pence per day, but if the amount of time taken to return the book is greater than 26 weeks (6 months) then it will be assumed missing. In this scenario the fine to the borrower will be capped at 10 pence * 182 days (26 weeks) PLUS the cost of the missing book. Use a stored procedure to update the fine amount each day;
   4. Adding a BOOLEAN column to overdue_books to show whether fine is paid or not; and
   5. If the fine has been paid, DELETING the data from that row.
