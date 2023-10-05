@@ -76,7 +76,7 @@
 
 * **Scenario 11:** Tackle issue of overdue books. Key aspects of this project include:
   1. Analysing borrowing duration: calculate the average borrowing duration for all books (whether returned or still on loan). This analysis is intended to support determining a reasonable timeframe for chasing overdue books;
-  2.  Use a daily event to call the overdue checks procedure;
   2. Calculating fines stored function: This is based on a rate of 10 pence per day, but if the amount of time taken to return the book is greater than 26 weeks (6 months) then it will be assumed missing. In this scenario the fine to the borrower will be capped at 10 pence * 182 days (26 weeks) PLUS the cost of the missing book.
-  5. Adding a BOOLEAN column to overdue_books to show whether fine is paid or not; and
-  6. If the fine has been paid, DELETING the data from that row.
+  3. Adding a BOOLEAN column to overdue_books to show whether fine is paid or not; and
+  4. If the fine has been paid, DELETING the data from that row.
+  5.  Use a daily event to call the overdue checks procedure.
