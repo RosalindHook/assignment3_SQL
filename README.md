@@ -61,7 +61,7 @@
   5. Adding a column to track the number of books borrowed by each wizard to the 'wizards' table;
   6. Updating the 'books_borrowed' column to count the number of books borrowed by each wizard;
   7. Creating a new table 'overdue_books' with a 'fine_amount' column;
-  8. Using stored procedure to populate 'overdue_books' table with information about all overdue books;
+  8. Creating a stored procedure to populate 'overdue_books' table with information about all overdue books;
   9. Adding a new table 'book_value'; and
   10. Populating 'book_value' table with replacement costs linked to the 'books' table via book_id (FK).
 
@@ -77,6 +77,4 @@
 * **Scenario 11:** Tackle issue of overdue books. Key aspects of this project include:
   1. Analysing borrowing duration: calculate the average borrowing duration for all books (whether returned or still on loan). This analysis is intended to support determining a reasonable timeframe for chasing overdue books;
   2. Calculating fines stored function: This is based on a rate of 10 pence per day, but if the amount of time taken to return the book is greater than 26 weeks (6 months) then it will be assumed missing. In this scenario the fine to the borrower will be capped at 10 pence * 182 days (26 weeks) PLUS the cost of the missing book.
-  3. Adding a BOOLEAN column to overdue_books to show whether fine is paid or not; and
-  4. If the fine has been paid, DELETING the data from that row.
-  5.  Use a daily event to call the overdue checks procedure.
+  3. Deletes record from overdue_books table when the fine is paid ('fine_paid' switched to TRUE)
