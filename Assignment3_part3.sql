@@ -56,25 +56,42 @@ SET books_borrowed = (
 /* vii. creates new empty table overdue_books */
 CREATE TABLE overdue_books (
 overdue_id SERIAL PRIMARY KEY,
+borrowed_id INTEGER REFERENCES borrowed_books(borrowed_id),
 wizard_id INTEGER REFERENCES wizards(wizard_id),
 book_id INTEGER REFERENCES books(book_id),
 due_date DATE,
-return_date DATE,
-fine_amount DECIMAL(8,2)
+return_date DATE
 );
 
-/* viii. populates overdue_books using UNION operator*/
--- books that have been overdue and now returned
-INSERT INTO overdue_books (wizard_id, book_id, due_date, return_date)
-SELECT bb.wizard_id, bb.book_id, bb.due_date, bb.return_date
+/* viii. uses STORED PROCEDURE with UNION operator to populate overdue_books table */
+
+DELIMITER //
+
+CREATE PROCEDURE populate_overdue_books()
+BEGIN
+-- Insert latest overdue books into overdue_books table
+INSERT INTO overdue_books (borrowed_id, wizard_id, book_id, due_date, return_date)
+SELECT bb.borrowed_id, bb.wizard_id, bb.book_id, bb.due_date, bb.return_date
 FROM borrowed_books bb
-WHERE bb.due_date < bb.return_date   -- selects books where due date is earlier than return date
-UNION
--- books that are currently overdue and not yet returned
-SELECT
-bb.wizard_id, bb.book_id, bb.due_date, NULL as return_date
-FROM borrowed_books bb
-WHERE bb.due_date < NOW() AND bb.returned = FALSE; -- selects currently overdue books, fine = NULL
+WHERE 
+	(bb.due_date < bb.return_date -- books were overdue now returned
+	OR 
+	(bb.due_date < NOW() AND bb.returned = FALSE)) -- for books that are still overdue now
+	AND bb.borrowed_id NOT IN
+	(SELECT borrowed_id FROM overdue_books); -- ensures FK does not repeat PK value from borrowed_books table    
+END;
+//
+
+DELIMITER ;
+
+/* optional queries to check stored procedure has worked by creating new row of data for borrowed_books table and then calling stored procedure */
+INSERT INTO borrowed_books (borrow_date, due_date, return_date, wizard_id, book_id, returned)
+VALUES
+('2023-08-25', DATE_ADD('2023-08-25', INTERVAL 4 WEEK),	NULL, 18, 11, FALSE);
+CALL populate_overdue_books();
+SELECT * FROM overdue_books; -- returns new row in overdue_books by taking data that has been inserted into borrowed_books, and identifying it as overdue
+
+SELECT * FROM borrowed_books;
 
 /* ix. creates new empty table book_value */
 CREATE TABLE book_value (
@@ -153,11 +170,9 @@ average borrowing duration in days*/
 SELECT AVG(DATEDIFF(bb.return_date, bb.borrow_date)) AS average_duration
 FROM borrowed_books bb;    -- average is 42.6 days
 
-/* ii) to follow */
+/* ii) creates stored function to calculate fine amount */
 
-/* iii) creates stored function to calculate fine */
 DELIMITER //
-
 CREATE FUNCTION calculate_fine(
 	in_return_date DATE,
     in_due_date DATE,
@@ -176,7 +191,7 @@ BEGIN
 			);
 		END IF;
 	ELSE -- for books that have not yet been returned and are overdue
-		IF DATEDIFF(NOW(), in_due_date) <- 7 * 26 THEN -- books less than 6 months overdue
+		IF DATEDIFF(NOW(), in_due_date) <= 7 * 26 THEN -- books less than 6 months overdue
 			SET fine = DATEDIFF(NOW(), in_due_date) * 0.10;
 		ELSE -- for books more than 6 months overdue
 			SET fine = (7 * 26 * 0.10) + (
@@ -188,16 +203,13 @@ BEGIN
     RETURN fine;
 END;
 //
-
 DELIMITER ;
-    
-/* calls calculate_fine() to update overdue_books with fine information */
-UPDATE overdue_books
-SET fine_amount = calculate_fine(return_date, due_date, book_id)
-WHERE return_date > due_date OR due_date < NOW();
 
-/* optional query to check fine_amount column populated correctly
-SELECT * FROM overdue_books; */
+/* calls calculate_fine stored function and returns fine_amount as temporary result */
+SELECT return_date, due_date, book_id, calculate_fine(return_date, due_date, book_id) AS fine_amount
+FROM
+overdue_books;
+
 
 /* iv) Adds a fine_paid column to the overdue_books table, sets default value as FALSE */
 ALTER TABLE overdue_books
