@@ -2,8 +2,6 @@
 
 ## Summary of project ##
 
-* This is my third assignment for the CFG Software Engineering Degree, covering data and MySQL.
-
 * This assignment was designed and written using MySQL Workbench. It comprises three main .sql files containing queries covering the assignment's main criteria, the main purpose of which is *"to solve a specific problem as per your chosen theme."*
 
 * My overarching scenario of use is as follows: You are a librarian in a magical library and need to manage the library stock for your wizarding customers. Books are classified by genre and some are restricted and are only allowed to be borrowed by fully qualified (advanced) wizards. There are a number of different use scenarios that I outline in the 'usage' section, designed to provide real-life (albeit magical) problems that can be solved using SQL queries and by modifying the database/its tables.
